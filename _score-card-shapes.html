@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>스코어 카드 형상 시안 · v1 만들기 페이지</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css" />
+<style>
+  :root {
+    --green: #00CD60;
+    --green-deep: #00b754;
+    --green-soft: #E6FAF0;
+    --ink: #1a1a1a;
+    --gray900: #1a1a1a;
+    --gray700: #424242;
+    --gray500: #8a8a8a;
+    --gray300: #d4d4d4;
+    --gray100: #f0f0f0;
+    --gray50:  #f7f7f8;
+    --bg: #f2f3f5;
+    --blue: #3182f6; /* 토스 톤 (참고용) */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 32px 16px 80px;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.018em;
+  }
+  .page-title {
+    max-width: 1100px; margin: 0 auto 32px;
+    font-size: 22px; font-weight: 700;
+  }
+  .page-title small {
+    display: block; margin-top: 6px;
+    font-size: 13px; font-weight: 500; color: var(--gray500);
+  }
+  .grid {
+    display: grid; gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    max-width: 1100px; margin: 0 auto;
+  }
+  .frame {
+    background: #fff; border-radius: 20px; padding: 20px 16px 24px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .frame__label {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .frame__num {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--gray500);
+  }
+  .frame__name {
+    font-size: 15px; font-weight: 700; color: var(--ink);
+  }
+  .frame__desc {
+    font-size: 12px; color: var(--gray500); font-weight: 500;
+    margin-bottom: 18px; line-height: 1.5;
+  }
+  .stage {
+    background: var(--bg);
+    border-radius: 16px;
+    padding: 28px 20px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 240px;
+  }
+  .tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+  /* ========== 시안 1: 토스 듀얼 아크 (NPay 점수 + 신용점수) ========== */
+  .v1-wrap { display: flex; gap: 28px; align-items: flex-end; }
+  .arc { position: relative; width: 132px; height: 80px; }
+  .arc svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  .arc__inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    padding-top: 14px;
+  }
+  .arc__lbl {
+    display: inline-flex; align-items: center; gap: 2px;
+    font-size: 13px; font-weight: 600; color: var(--gray500);
+    margin-bottom: 2px;
+  }
+  .arc__lbl svg { width: 8px; height: 12px; }
+  .arc__val {
+    font-size: 26px; font-weight: 800; color: var(--ink);
+    letter-spacing: -0.04em;
+  }
+  .arc__val small { font-size: 15px; font-weight: 700; margin-left: 1px; }
+
+  /* ========== 시안 2: 싱글 아크 + 빅넘버 (NPay만 강조) ========== */
+  .v2 { position: relative; width: 220px; height: 140px; }
+  .v2 svg { width: 100%; height: 100%; overflow: visible; display: block; }
+  .v2__inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    padding-top: 52px;
+  }
+  .v2__kicker {
+    font-size: 12px; font-weight: 700; color: var(--gray500);
+    letter-spacing: 0.04em; margin-bottom: 4px;
+  }
+  .v2__val {
+    font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    font-size: 44px; font-weight: 700; color: var(--ink);
+    letter-spacing: -0.04em; line-height: 1;
+  }
+  .v2__unit {
+    font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    font-size: 16px; font-weight: 600; color: var(--gray700); margin-left: 2px;
+  }
+  .v2__delta {
+    margin-top: 8px;
+    font-size: 12px; font-weight: 700; color: var(--green-deep);
+    padding: 3px 9px; background: var(--green-soft); border-radius: 999px;
+  }
+
+  /* ========== 시안 3: 미니멀 카드 (그라데이션 X, 솔리드 그린) ========== */
+  .v3-card {
+    width: 240px; padding: 22px 22px 20px;
+    background: var(--green);
+    border-radius: 18px;
+    color: #fff;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .v3__brand {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.12em;
+    opacity: 0.85; margin-bottom: 8px;
+  }
+  .v3__brand-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #fff; display: grid; place-items: center;
+    color: var(--green); font-size: 10px; font-weight: 900;
+  }
+  .v3__row { display: flex; align-items: baseline; gap: 4px; }
+  .v3__val { font-size: 48px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+  .v3__unit { font-size: 17px; font-weight: 700; opacity: 0.9; }
+  .v3__sub {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,.22);
+    font-size: 11.5px; font-weight: 600; opacity: 0.85;
+  }
+
+  /* ========== 시안 4: 빅 넘버 + 보조 아크 (좌측 점수, 우측 게이지) ========== */
+  .v4 {
+    width: 280px; padding: 24px 22px;
+    background: #fff; border: 1px solid var(--gray100);
+    border-radius: 18px;
+    display: grid; grid-template-columns: 1fr auto; align-items: center;
+    gap: 14px;
+  }
+  .v4__lbl {
+    font-size: 12px; font-weight: 700; color: var(--gray500);
+    letter-spacing: 0.04em; margin-bottom: 4px;
+  }
+  .v4__val { font-size: 42px; font-weight: 800; color: var(--ink); letter-spacing: -0.045em; line-height: 1; }
+  .v4__unit { font-size: 15px; font-weight: 700; color: var(--gray700); margin-left: 2px; }
+  .v4__delta {
+    display: inline-block; margin-top: 8px;
+    font-size: 11px; font-weight: 800; color: var(--green-deep);
+    letter-spacing: -0.01em;
+  }
+  .v4__ring { width: 64px; height: 64px; position: relative; }
+  .v4__ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .v4__ring-pct {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    font-size: 13px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em;
+  }
+
+  /* ========== 시안 5: 토스 듀얼 아크 (NPay + 신용점수, 시안 1 변형 - 더 큼) ========== */
+  .v5 { display: flex; gap: 22px; }
+  .v5__arc { position: relative; width: 116px; height: 72px; }
+  .v5__arc svg { width: 100%; height: 100%; display: block; }
+  .v5__inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    padding-top: 12px;
+  }
+  .v5__lbl {
+    font-size: 12px; font-weight: 600; color: var(--gray500);
+    display: inline-flex; align-items: center; gap: 2px;
+    margin-bottom: 2px;
+  }
+  .v5__val { font-size: 22px; font-weight: 800; color: var(--ink); letter-spacing: -0.04em; }
+  .v5__val small { font-size: 13px; font-weight: 700; margin-left: 1px; }
+
+  /* ========== 시안 6: 텍스트 only (no chrome) ========== */
+  .v6 { text-align: center; }
+  .v6__brand {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 700; color: var(--green-deep);
+    letter-spacing: 0.1em; margin-bottom: 10px;
+  }
+  .v6__brand-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .v6__val {
+    font-size: 88px; font-weight: 800; color: var(--ink);
+    letter-spacing: -0.06em; line-height: 0.95;
+  }
+  .v6__unit { font-size: 24px; font-weight: 700; color: var(--gray500); margin-left: 4px; }
+  .v6__sub {
+    margin-top: 10px;
+    font-size: 13px; font-weight: 600; color: var(--gray500);
+  }
+  .v6__sub b { color: var(--green-deep); font-weight: 800; }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">
+  스코어 카드 형상 시안
+  <small>v1 만들기 페이지 상단 720점 카드 · 5가지 컨셉 · 그린 톤 유지 · 깔끔/심플</small>
+</h1>
+
+<div class="grid">
+
+  <!-- ========== 01 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">01</span>
+      <span class="frame__name">토스 듀얼 아크</span>
+    </header>
+    <p class="frame__desc">두 점수 병렬 — NPay 스코어 + KCB(또는 외부 신용점수)<br/>토스 만점 UI 그대로의 깔끔함</p>
+    <div class="stage">
+      <div class="v1-wrap">
+        <!-- NPay -->
+        <div class="arc">
+          <svg viewBox="0 0 132 80">
+            <path d="M10,70 A56,56 0 0,1 122,70" fill="none" stroke="#e8e8eb" stroke-width="6" stroke-linecap="round"/>
+            <path d="M10,70 A56,56 0 0,1 122,70" fill="none" stroke="#00CD60" stroke-width="6" stroke-linecap="round"
+                  stroke-dasharray="176" stroke-dashoffset="35"/>
+          </svg>
+          <div class="arc__inner">
+            <span class="arc__lbl">NPay<svg viewBox="0 0 9 16" fill="none"><path d="m1 1 5 7-5 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="arc__val tnum">720<small>점</small></span>
+          </div>
+        </div>
+        <!-- KCB -->
+        <div class="arc">
+          <svg viewBox="0 0 132 80">
+            <path d="M10,70 A56,56 0 0,1 122,70" fill="none" stroke="#e8e8eb" stroke-width="6" stroke-linecap="round"/>
+            <path d="M10,70 A56,56 0 0,1 122,70" fill="none" stroke="#00CD60" stroke-width="6" stroke-linecap="round"
+                  stroke-dasharray="176" stroke-dashoffset="22"/>
+          </svg>
+          <div class="arc__inner">
+            <span class="arc__lbl">KCB<svg viewBox="0 0 9 16" fill="none"><path d="m1 1 5 7-5 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="arc__val tnum">847<small>점</small></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ========== 02 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">02</span>
+      <span class="frame__name">싱글 아크 + 빅넘버</span>
+    </header>
+    <p class="frame__desc">NPay 점수만 단독 강조 · 변화량 칩 보조<br/>"내 점수" 한 가지에 집중</p>
+    <div class="stage">
+      <div class="v2">
+        <svg viewBox="0 0 260 160">
+          <path d="M22,130 A108,108 0 0,1 238,130" fill="none" stroke="#e8e8eb" stroke-width="8" stroke-linecap="round"/>
+          <path d="M22,130 A108,108 0 0,1 238,130" fill="none" stroke="#00CD60" stroke-width="8" stroke-linecap="round"
+                stroke-dasharray="339" stroke-dashoffset="77"/>
+        </svg>
+        <div class="v2__inner">
+          <span class="v2__kicker">NPay 스코어</span>
+          <span><span class="v2__val tnum">720</span><span class="v2__unit">점</span></span>
+          <span class="v2__delta tnum">+12점 이번 달</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ========== 03 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">03</span>
+      <span class="frame__name">솔리드 그린 카드</span>
+    </header>
+    <p class="frame__desc">v1의 그라데이션 카드 → 솔리드 그린으로 정리<br/>브랜드감 + 더 깔끔한 면</p>
+    <div class="stage">
+      <div class="v3-card">
+        <div class="v3__brand">
+          <span class="v3__brand-dot">N</span>
+          <span>NPAY SCORE</span>
+        </div>
+        <div class="v3__row">
+          <span class="v3__val tnum">720</span>
+          <span class="v3__unit">점</span>
+        </div>
+        <div class="v3__sub">내 페이 활동 기반 점수</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ========== 04 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">04</span>
+      <span class="frame__name">빅넘버 + 보조 도넛</span>
+    </header>
+    <p class="frame__desc">화이트 카드 · 좌측 점수, 우측 도넛(다음 등급까지)<br/>정보 두 개를 한 카드에</p>
+    <div class="stage">
+      <div class="v4">
+        <div>
+          <div class="v4__lbl">NPay 스코어</div>
+          <div><span class="v4__val tnum">720</span><span class="v4__unit">점</span></div>
+          <div class="v4__delta">▲ +12점 이번 달</div>
+        </div>
+        <div class="v4__ring">
+          <svg viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="26" fill="none" stroke="#eef0f2" stroke-width="6"/>
+            <circle cx="32" cy="32" r="26" fill="none" stroke="#00CD60" stroke-width="6" stroke-linecap="round"
+                    stroke-dasharray="163" stroke-dashoffset="59"/>
+          </svg>
+          <div class="v4__ring-pct">64%</div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ========== 05 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">05</span>
+      <span class="frame__name">컴팩트 듀얼 아크</span>
+    </header>
+    <p class="frame__desc">시안 01보다 작게 · 헤더 바로 아래 들어가는 사이즈<br/>v1 화면에 그대로 얹기 좋음</p>
+    <div class="stage">
+      <div class="v5">
+        <div class="v5__arc">
+          <svg viewBox="0 0 116 72">
+            <path d="M10,62 A48,48 0 0,1 106,62" fill="none" stroke="#e8e8eb" stroke-width="5" stroke-linecap="round"/>
+            <path d="M10,62 A48,48 0 0,1 106,62" fill="none" stroke="#00CD60" stroke-width="5" stroke-linecap="round"
+                  stroke-dasharray="151" stroke-dashoffset="30"/>
+          </svg>
+          <div class="v5__inner">
+            <span class="v5__lbl">NPay</span>
+            <span class="v5__val tnum">720<small>점</small></span>
+          </div>
+        </div>
+        <div class="v5__arc">
+          <svg viewBox="0 0 116 72">
+            <path d="M10,62 A48,48 0 0,1 106,62" fill="none" stroke="#e8e8eb" stroke-width="5" stroke-linecap="round"/>
+            <path d="M10,62 A48,48 0 0,1 106,62" fill="none" stroke="#00CD60" stroke-width="5" stroke-linecap="round"
+                  stroke-dasharray="151" stroke-dashoffset="18"/>
+          </svg>
+          <div class="v5__inner">
+            <span class="v5__lbl">KCB</span>
+            <span class="v5__val tnum">847<small>점</small></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ========== 06 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">06</span>
+      <span class="frame__name">텍스트 only · 노 크롬</span>
+    </header>
+    <p class="frame__desc">카드 없음 · 점수 자체가 그래픽<br/>가장 자신감 있는 톤. 컨텐츠가 곧 디자인</p>
+    <div class="stage">
+      <div class="v6">
+        <div class="v6__brand"><span class="v6__brand-dot"></span> NPAY SCORE</div>
+        <div><span class="v6__val tnum">720</span><span class="v6__unit">점</span></div>
+        <div class="v6__sub">이번 달 <b class="tnum">+12점</b> · 상위 38%</div>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Npay 스코어 올리기 미션 컴포넌트 시안</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css" />
+<style>
+  :root {
+    --green: #00CD60;
+    --green-deep: #00b754;
+    --green-soft: #E6FAF0;
+    --green-softer: #f1fbf5;
+    --ink: #1a1a1a;
+    --gray900: #1a1a1a;
+    --gray700: #424242;
+    --gray500: #8a8a8a;
+    --gray400: #c4c8cf;
+    --gray300: #d4d4d4;
+    --gray200: #ebeef2;
+    --gray100: #f6f8fa;
+    --gray50:  #f7f7f8;
+    --bg: #f2f3f5;
+    --white: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 32px 16px 80px;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.018em;
+  }
+  .page-title {
+    max-width: 1100px; margin: 0 auto 32px;
+    font-size: 22px; font-weight: 700;
+  }
+  .page-title small {
+    display: block; margin-top: 6px;
+    font-size: 13px; font-weight: 500; color: var(--gray500);
+  }
+  .grid {
+    display: grid; gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    max-width: 1100px; margin: 0 auto;
+  }
+  .frame {
+    background: #fff; border-radius: 20px; padding: 20px 16px 24px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .frame__label {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .frame__num {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--gray500);
+  }
+  .frame__name {
+    font-size: 15px; font-weight: 700; color: var(--ink);
+  }
+  .frame__desc {
+    font-size: 12px; color: var(--gray500); font-weight: 500;
+    margin-bottom: 18px; line-height: 1.5;
+  }
+  .stage {
+    background: var(--bg);
+    border-radius: 16px;
+    padding: 22px 16px;
+    display: flex; align-items: stretch; justify-content: center;
+    min-height: 260px;
+  }
+  .stage__mobile {
+    width: 100%; max-width: 327px;
+    background: var(--white);
+    border-radius: 14px;
+    padding: 16px 14px;
+  }
+  .tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+  /* 공통 섹션 헤더 (모바일 프레임 내부) */
+  .sec-head { margin-bottom: 14px; }
+  .sec-head__badge {
+    display: inline-flex; align-items: center;
+    padding: 4px 9px; border-radius: 999px;
+    background: var(--green-soft); color: var(--green-deep);
+    font-size: 11px; font-weight: 700; letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .sec-head__title {
+    font-size: 16px; font-weight: 800; color: var(--ink);
+    letter-spacing: -0.03em; line-height: 1.35;
+  }
+  .sec-head__body {
+    margin-top: 6px;
+    font-size: 12.5px; color: var(--gray500); font-weight: 500;
+    letter-spacing: -0.2px; line-height: 1.45;
+  }
+
+  /* ========== 시안 1: 미니멀 체크리스트 ========== */
+  .m1 {
+    margin-top: 14px;
+    background: var(--gray100);
+    border-radius: 14px;
+    padding: 4px 0;
+  }
+  .m1__row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .m1__row:last-child { border-bottom: 0; }
+  .m1__check {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.6px solid var(--gray300);
+    flex-shrink: 0; background: var(--white);
+    display: grid; place-items: center;
+  }
+  .m1__check.is-done {
+    background: var(--green); border-color: var(--green);
+  }
+  .m1__check.is-done svg { color: #fff; }
+  .m1__title {
+    flex: 1; min-width: 0;
+    font-size: 14px; font-weight: 600; color: var(--gray900);
+    letter-spacing: -0.25px;
+  }
+  .m1__title.is-done {
+    color: var(--gray500); text-decoration: line-through;
+  }
+  .m1__pts {
+    font-size: 13px; font-weight: 800; color: var(--green-deep);
+    letter-spacing: -0.02em; flex-shrink: 0;
+  }
+
+  /* ========== 시안 2: 타일 그리드 (2열) ========== */
+  .m2 {
+    margin-top: 14px;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+  }
+  .m2__tile {
+    background: var(--gray100);
+    border-radius: 14px;
+    padding: 14px 14px 14px;
+    display: flex; flex-direction: column; gap: 8px;
+    position: relative;
+  }
+  .m2__icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--white);
+    display: grid; place-items: center;
+    font-size: 18px;
+  }
+  .m2__title {
+    font-size: 13.5px; font-weight: 700; color: var(--gray900);
+    letter-spacing: -0.25px; line-height: 1.35;
+  }
+  .m2__chip {
+    margin-top: auto;
+    align-self: flex-start;
+    font-size: 11.5px; font-weight: 800;
+    color: var(--green-deep); background: var(--green-soft);
+    padding: 3px 8px; border-radius: 999px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ========== 시안 3: 프로그레스 바 카드 ========== */
+  .m3 { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .m3__card {
+    background: var(--gray100);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .m3__icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--white);
+    display: grid; place-items: center;
+    font-size: 19px;
+    flex-shrink: 0;
+  }
+  .m3__body { flex: 1; min-width: 0; }
+  .m3__row1 {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .m3__title {
+    font-size: 13.5px; font-weight: 700; color: var(--gray900);
+    letter-spacing: -0.25px;
+  }
+  .m3__pts {
+    font-size: 12px; font-weight: 800; color: var(--green-deep);
+    letter-spacing: -0.02em;
+  }
+  .m3__bar {
+    height: 6px; background: var(--gray200); border-radius: 999px;
+    position: relative;
+  }
+  .m3__bar-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: linear-gradient(90deg, #00CD60 0%, #3ddc84 100%);
+    border-radius: 999px;
+  }
+  /* 현재 진행점 도트 + 약한 스플래시 */
+  .m3__bar-fill::after {
+    content: "";
+    position: absolute;
+    right: 0; top: 50%;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    transform: translate(50%, -50%);
+    box-shadow:
+      0 0 0 2px #fff,
+      0 0 0 4px rgba(0, 205, 96, 0.30),
+      0 0 7px 2px rgba(0, 205, 96, 0.40);
+    animation: m3-splash 1.8s ease-in-out infinite;
+  }
+  @keyframes m3-splash {
+    0%, 100% {
+      box-shadow:
+        0 0 0 2px #fff,
+        0 0 0 4px rgba(0, 205, 96, 0.30),
+        0 0 7px 2px rgba(0, 205, 96, 0.40);
+    }
+    50% {
+      box-shadow:
+        0 0 0 2px #fff,
+        0 0 0 5px rgba(0, 205, 96, 0.10),
+        0 0 11px 3px rgba(0, 205, 96, 0.18);
+    }
+  }
+  /* 완료 상태에서는 도트/스플래시 숨김 */
+  .m3__bar-fill.is-done::after { display: none; }
+  .m3__progress {
+    margin-top: 4px;
+    font-size: 11px; font-weight: 700; color: var(--gray500);
+    letter-spacing: -0.01em;
+  }
+
+  /* ========== 시안 5: 신용성장계좌 데이터 성장 트래커 ========== */
+  .m5 { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .m5__card {
+    background: var(--gray100);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .m5__icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--white);
+    display: grid; place-items: center;
+    font-size: 19px;
+    flex-shrink: 0;
+  }
+  .m5__body { flex: 1; min-width: 0; }
+  .m5__head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 8px; margin-bottom: 8px;
+  }
+  .m5__title {
+    font-size: 13.5px; font-weight: 700; color: var(--gray900);
+    letter-spacing: -0.25px;
+  }
+  .m5__title small {
+    margin-left: 2px;
+    font-size: 11.5px; font-weight: 500; color: var(--gray500);
+    letter-spacing: -0.01em;
+  }
+  .m5__pts {
+    flex-shrink: 0;
+    font-size: 12px; font-weight: 800; color: var(--green-deep);
+    letter-spacing: -0.02em;
+  }
+  .m5__pts em {
+    margin-left: 3px;
+    font-style: normal;
+    font-weight: 600; color: var(--gray500);
+    font-size: 11px;
+  }
+  .m5__bar {
+    height: 6px; background: var(--gray200); border-radius: 999px;
+    position: relative;
+  }
+  .m5__bar-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: linear-gradient(90deg, #00CD60 0%, #3ddc84 100%);
+    border-radius: 999px;
+  }
+  .m5__bar-fill::after {
+    content: "";
+    position: absolute;
+    right: 0; top: 50%;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    transform: translate(50%, -50%);
+    box-shadow:
+      0 0 0 2px #fff,
+      0 0 0 4px rgba(0, 205, 96, 0.30),
+      0 0 7px 2px rgba(0, 205, 96, 0.40);
+    animation: m3-splash 1.8s ease-in-out infinite;
+  }
+  .m5__progress {
+    margin-top: 5px;
+    font-size: 11.5px; font-weight: 700; color: var(--gray500);
+    letter-spacing: -0.01em;
+  }
+
+  /* ========== 시안 4: 데일리 챌린지 (히어로 + 미션 리스트) ========== */
+  .m4 { margin-top: 14px; }
+  .m4__hero {
+    background: linear-gradient(135deg, #00CD60 0%, #00b754 100%);
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    color: #fff;
+    position: relative; overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 205, 96, 0.18);
+  }
+  .m4__hero::after {
+    content: "";
+    position: absolute; right: -30px; top: -30px;
+    width: 130px; height: 130px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    pointer-events: none;
+  }
+  .m4__kicker {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.04em;
+    padding: 3px 8px; border-radius: 999px;
+    background: rgba(255,255,255,0.18);
+    margin-bottom: 10px;
+  }
+  .m4__hero-title {
+    font-size: 17px; font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.03em;
+  }
+  .m4__hero-reward {
+    margin-top: 8px; font-size: 12.5px; font-weight: 600;
+    opacity: 0.92;
+  }
+  .m4__hero-reward b { font-weight: 800; }
+  .m4__hero-cta {
+    margin-top: 14px;
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #fff; color: var(--green-deep);
+    font-size: 13px; font-weight: 800;
+    padding: 9px 14px; border-radius: 999px;
+    letter-spacing: -0.02em;
+  }
+  .m4__sub {
+    margin-top: 10px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .m4__sub-row {
+    background: var(--gray100);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .m4__sub-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: var(--white);
+    display: grid; place-items: center;
+    font-size: 14px;
+  }
+  .m4__sub-title {
+    flex: 1; font-size: 12.5px; font-weight: 700; color: var(--gray900);
+    letter-spacing: -0.2px;
+  }
+  .m4__sub-pts {
+    font-size: 11.5px; font-weight: 800; color: var(--green-deep);
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">
+  Npay 스코어 올리기 — 미션 컴포넌트 시안
+  <small>'생성된' 페이지 ② 섹션 · 4가지 컨셉 · 그린 톤 · 카드 240×140 스코프</small>
+</h1>
+
+<div class="grid">
+
+  <!-- ========== 01 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">01</span>
+      <span class="frame__name">미니멀 체크리스트</span>
+    </header>
+    <p class="frame__desc">가장 군더더기 없는 형태 · 한 줄에 미션·점수만<br/>완료된 미션은 취소선 + 체크</p>
+    <div class="stage">
+      <div class="stage__mobile">
+        <div class="sec-head">
+          <span class="sec-head__badge">Npay 스코어 올리기</span>
+          <h2 class="sec-head__title">미션 완료하고<br/>스코어 올려 보세요</h2>
+          <p class="sec-head__body">간단한 활동으로 다음 등급까지 빠르게 도달해요.</p>
+        </div>
+        <div class="m1">
+          <div class="m1__row">
+            <span class="m1__check is-done">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 5l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="m1__title is-done">네이버페이로 결제하기</span>
+            <span class="m1__pts">+10점</span>
+          </div>
+          <div class="m1__row">
+            <span class="m1__check"></span>
+            <span class="m1__title">네이버 지도로 길 찾기</span>
+            <span class="m1__pts">+5점</span>
+          </div>
+          <div class="m1__row">
+            <span class="m1__check"></span>
+            <span class="m1__title">네이버 메일 보내기</span>
+            <span class="m1__pts">+5점</span>
+          </div>
+          <div class="m1__row">
+            <span class="m1__check"></span>
+            <span class="m1__title">네이버 검색 5회 이상</span>
+            <span class="m1__pts">+3점</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ========== 02 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">02</span>
+      <span class="frame__name">타일 그리드 (2열)</span>
+    </header>
+    <p class="frame__desc">아이콘 강조 · 게이미피케이션 톤<br/>한눈에 4개 미션 노출, 시각적 인지 빠름</p>
+    <div class="stage">
+      <div class="stage__mobile">
+        <div class="sec-head">
+          <span class="sec-head__badge">Npay 스코어 올리기</span>
+          <h2 class="sec-head__title">미션 완료하고<br/>스코어 올려 보세요</h2>
+          <p class="sec-head__body">활동 하나에 점수 하나씩, 쌓이는 재미.</p>
+        </div>
+        <div class="m2">
+          <div class="m2__tile">
+            <div class="m2__icon" style="background:#e6f7ee;color:#00b754">🗺️</div>
+            <div class="m2__title">네이버 지도로<br/>길 찾기</div>
+            <span class="m2__chip">+5점</span>
+          </div>
+          <div class="m2__tile">
+            <div class="m2__icon" style="background:#eaf2ff;color:#2563eb">✉️</div>
+            <div class="m2__title">네이버 메일<br/>보내기</div>
+            <span class="m2__chip">+5점</span>
+          </div>
+          <div class="m2__tile">
+            <div class="m2__icon" style="background:#fff4e0;color:#f59e0b">💳</div>
+            <div class="m2__title">네이버페이<br/>결제하기</div>
+            <span class="m2__chip">+10점</span>
+          </div>
+          <div class="m2__tile">
+            <div class="m2__icon" style="background:#f3edff;color:#7c3aed">🔍</div>
+            <div class="m2__title">네이버 검색<br/>5회 이상</div>
+            <span class="m2__chip">+3점</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ========== 03 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">03</span>
+      <span class="frame__name">프로그레스 카드</span>
+    </header>
+    <p class="frame__desc">단계형 미션 · 진행률 막대 + 현재/전체<br/>"얼마나 남았는지" 한눈에</p>
+    <div class="stage">
+      <div class="stage__mobile">
+        <div class="sec-head">
+          <span class="sec-head__badge">Npay 스코어 올리기</span>
+          <h2 class="sec-head__title">미션 완료하고<br/>스코어 올려 보세요</h2>
+          <p class="sec-head__body">단계별로 진행하며 점수를 누적할 수 있어요.</p>
+        </div>
+        <div class="m3">
+          <div class="m3__card">
+            <div class="m3__icon" style="background:#e6f7ee;color:#00b754">🗺️</div>
+            <div class="m3__body">
+              <div class="m3__row1">
+                <span class="m3__title">네이버 지도로 길 찾기</span>
+                <span class="m3__pts">+5점</span>
+              </div>
+              <div class="m3__bar">
+                <div class="m3__bar-fill" style="width:60%"></div>
+              </div>
+              <div class="m3__progress tnum">3/5회 완료</div>
+            </div>
+          </div>
+          <div class="m3__card">
+            <div class="m3__icon" style="background:#eaf2ff;color:#2563eb">✉️</div>
+            <div class="m3__body">
+              <div class="m3__row1">
+                <span class="m3__title">네이버 메일 보내기</span>
+                <span class="m3__pts">+5점</span>
+              </div>
+              <div class="m3__bar">
+                <div class="m3__bar-fill" style="width:30%"></div>
+              </div>
+              <div class="m3__progress tnum">1/3회 완료</div>
+            </div>
+          </div>
+          <div class="m3__card">
+            <div class="m3__icon" style="background:#fff4e0;color:#f59e0b">💳</div>
+            <div class="m3__body">
+              <div class="m3__row1">
+                <span class="m3__title">네이버페이 결제하기</span>
+                <span class="m3__pts">+10점</span>
+              </div>
+              <div class="m3__bar">
+                <div class="m3__bar-fill is-done" style="width:100%;"></div>
+              </div>
+              <div class="m3__progress tnum" style="color:var(--green-deep)">완료!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ========== 04 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">04</span>
+      <span class="frame__name">데일리 챌린지 (히어로)</span>
+    </header>
+    <p class="frame__desc">오늘의 미션을 그린 히어로로 강조<br/>+ 보조 미션 리스트 = 우선순위 명확</p>
+    <div class="stage">
+      <div class="stage__mobile">
+        <div class="sec-head">
+          <span class="sec-head__badge">Npay 스코어 올리기</span>
+          <h2 class="sec-head__title">미션 완료하고<br/>스코어 올려 보세요</h2>
+          <p class="sec-head__body">오늘 하나만 완료해도 점수가 올라가요.</p>
+        </div>
+        <div class="m4">
+          <div class="m4__hero">
+            <span class="m4__kicker">🔥 오늘의 미션</span>
+            <div class="m4__hero-title">네이버페이로<br/>오늘 결제하기</div>
+            <div class="m4__hero-reward">완료 시 <b>+10점</b> · 남은 시간 <b class="tnum">06:24:11</b></div>
+            <div class="m4__hero-cta">
+              결제 시작하기
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="m3 1 4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="m4__sub">
+            <div class="m4__sub-row">
+              <div class="m4__sub-icon" style="background:#e6f7ee;color:#00b754">🗺️</div>
+              <span class="m4__sub-title">네이버 지도로 길 찾기</span>
+              <span class="m4__sub-pts">+5점</span>
+            </div>
+            <div class="m4__sub-row">
+              <div class="m4__sub-icon" style="background:#eaf2ff;color:#2563eb">✉️</div>
+              <span class="m4__sub-title">네이버 메일 보내기</span>
+              <span class="m4__sub-pts">+5점</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ========== 05 ========== -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">05</span>
+      <span class="frame__name">신용성장계좌 데이터 트래커</span>
+    </header>
+    <p class="frame__desc">미션이 아닌 "성장 데이터" 컨셉 · 자동 누적되는 활동 표시<br/>+점은 "예상" 표기로 미확정 느낌</p>
+    <div class="stage">
+      <div class="stage__mobile">
+        <div class="sec-head">
+          <span class="sec-head__badge">신용성장계좌 성장하기</span>
+          <h2 class="sec-head__title">네이버페이 많이쓰면<br/>신용성장계좌도 성장해요</h2>
+          <p class="sec-head__body">어떤 데이터들로 성장하고 있는지 살펴보세요.</p>
+        </div>
+        <div class="m5">
+          <div class="m5__card">
+            <div class="m5__icon" style="background:#e6f7ee;color:#00b754">💳</div>
+            <div class="m5__body">
+              <div class="m5__head">
+                <span class="m5__title">Npay 소비<small>(월 평균)</small></span>
+                <span class="m5__pts">+5점<em>예상</em></span>
+              </div>
+              <div class="m5__bar">
+                <div class="m5__bar-fill" style="width:75%"></div>
+              </div>
+              <div class="m5__progress tnum">150만원 / 200만원</div>
+            </div>
+          </div>
+          <div class="m5__card">
+            <div class="m5__icon" style="background:#eaf2ff;color:#2563eb">📱</div>
+            <div class="m5__body">
+              <div class="m5__head">
+                <span class="m5__title">통신비 성실 납부<small>(연속 개월)</small></span>
+                <span class="m5__pts">+3점<em>예상</em></span>
+              </div>
+              <div class="m5__bar">
+                <div class="m5__bar-fill" style="width:66.67%"></div>
+              </div>
+              <div class="m5__progress tnum">24개월 / 36개월</div>
+            </div>
+          </div>
+          <div class="m5__card">
+            <div class="m5__icon" style="background:#f3edff;color:#7c3aed">📚</div>
+            <div class="m5__body">
+              <div class="m5__head">
+                <span class="m5__title">문화 활동</span>
+                <span class="m5__pts">+1점<em>예상</em></span>
+              </div>
+              <div class="m5__bar">
+                <div class="m5__bar-fill" style="width:33.33%"></div>
+              </div>
+              <div class="m5__progress tnum">월 1권 / 월 3권</div>
+            </div>
+          </div>
+          <div class="m5__card">
+            <div class="m5__icon" style="background:#fff4e0;color:#f59e0b">🐷</div>
+            <div class="m5__body">
+              <div class="m5__head">
+                <span class="m5__title">건전 소비<small>(포인트 소액 저축)</small></span>
+                <span class="m5__pts">+2점<em>예상</em></span>
+              </div>
+              <div class="m5__bar">
+                <div class="m5__bar-fill" style="width:33.33%"></div>
+              </div>
+              <div class="m5__progress tnum">1만원 / 3만원</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+</body>
+</html>

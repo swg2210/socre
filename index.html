@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>네이버페이 스코어 — 생성 완료</title>
+
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- 듀얼 아크 (시안 02 빅넘버 스타일을 듀얼로) 전용 스타일 -->
+    <style>
+      .v1-wrap { display: flex; gap: 8px; align-items: flex-end; }
+      .arc { position: relative; width: 164px; height: 108px; }
+      .arc svg { width: 100%; height: 100%; overflow: visible; display: block; }
+      .arc__inner {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+        padding-top: 36px;
+      }
+      .arc__lbl {
+        font-size: 12px; font-weight: 700; color: #8a8a8a;
+        letter-spacing: 0.02em;
+        margin-bottom: 4px;
+      }
+      .arc__val {
+        font-size: 30px; font-weight: 800; color: #1a1a1a;
+        letter-spacing: -0.04em;
+        line-height: 1;
+      }
+      .arc__val small { font-size: 15px; font-weight: 700; margin-left: 2px; }
+      .tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+      /* 미션 프로그레스 카드 (시안 03) */
+      .m3 { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+      .m3__card {
+        background: var(--gray100);
+        border-radius: var(--r-lg);
+        padding: 14px 16px;
+        display: flex; align-items: center; gap: 14px;
+        transition:
+          transform 200ms var(--ease-out-quart),
+          background 200ms var(--ease-out-quart);
+      }
+      .m3__card:active { transform: scale(0.985); background: var(--gray150); }
+      @media (hover: hover) { .m3__card:hover { background: var(--gray150); } }
+      .m3__icon {
+        width: 40px; height: 40px; border-radius: var(--r-md);
+        background: var(--white);
+        display: grid; place-items: center;
+        font-size: 19px;
+        flex-shrink: 0;
+      }
+      .m3__body { flex: 1; min-width: 0; }
+      .m3__title {
+        font-size: 14.5px; font-weight: 700; color: var(--gray900);
+        letter-spacing: -0.3px;
+        margin-bottom: 8px;
+      }
+      .m3__bar {
+        height: 6px; background: var(--gray200); border-radius: 999px;
+        position: relative;
+      }
+      .m3__bar-fill {
+        position: absolute; left: 0; top: 0; bottom: 0;
+        background: linear-gradient(90deg, #00CD60 0%, #3ddc84 100%);
+        border-radius: 999px;
+      }
+      /* 현재 진행점 도트 + 약한 스플래시 */
+      .m3__bar-fill::after {
+        content: "";
+        position: absolute;
+        right: 0; top: 50%;
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: #00CD60;
+        transform: translate(50%, -50%);
+        box-shadow:
+          0 0 0 2px #fff,
+          0 0 0 4px rgba(0, 205, 96, 0.30),
+          0 0 7px 2px rgba(0, 205, 96, 0.40);
+        animation: m3-splash 1.8s ease-in-out infinite;
+      }
+      @keyframes m3-splash {
+        0%, 100% {
+          box-shadow:
+            0 0 0 2px #fff,
+            0 0 0 4px rgba(0, 205, 96, 0.30),
+            0 0 7px 2px rgba(0, 205, 96, 0.40);
+        }
+        50% {
+          box-shadow:
+            0 0 0 2px #fff,
+            0 0 0 5px rgba(0, 205, 96, 0.10),
+            0 0 11px 3px rgba(0, 205, 96, 0.18);
+        }
+      }
+      .m3__bar-fill.is-done::after { display: none; }
+      .m3__progress {
+        margin-top: 5px;
+        font-size: 11.5px; font-weight: 700; color: var(--gray500);
+        letter-spacing: -0.01em;
+      }
+
+      /* 신용성장계좌 데이터 성장 트래커 (시안 05) */
+      .m5 { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+      .m5__card {
+        background: var(--gray100);
+        border-radius: var(--r-lg);
+        padding: 14px 16px;
+        display: flex; align-items: center; gap: 14px;
+      }
+      .m5__icon {
+        width: 40px; height: 40px; border-radius: var(--r-md);
+        background: var(--white);
+        display: grid; place-items: center;
+        font-size: 19px;
+        flex-shrink: 0;
+      }
+      .m5__body { flex: 1; min-width: 0; }
+      .m5__head {
+        display: flex; align-items: baseline; justify-content: space-between;
+        gap: 8px; margin-bottom: 8px;
+      }
+      .m5__title {
+        font-size: 14px; font-weight: 700; color: var(--gray900);
+        letter-spacing: -0.25px;
+      }
+      .m5__title small {
+        margin-left: 2px;
+        font-size: 11.5px; font-weight: 500; color: var(--gray500);
+        letter-spacing: -0.01em;
+      }
+      .m5__pts {
+        flex-shrink: 0;
+        font-size: 12px; font-weight: 800; color: var(--green500);
+        letter-spacing: -0.02em;
+      }
+      .m5__pts em {
+        margin-left: 3px;
+        font-style: normal;
+        font-weight: 600; color: var(--gray500);
+        font-size: 11px;
+      }
+      .m5__bar {
+        height: 6px; background: var(--gray200); border-radius: 999px;
+        position: relative;
+      }
+      .m5__bar-fill {
+        position: absolute; left: 0; top: 0; bottom: 0;
+        background: linear-gradient(90deg, #00CD60 0%, #3ddc84 100%);
+        border-radius: 999px;
+      }
+      .m5__bar-fill::after {
+        content: "";
+        position: absolute;
+        right: 0; top: 50%;
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: #00CD60;
+        transform: translate(50%, -50%);
+        box-shadow:
+          0 0 0 2px #fff,
+          0 0 0 4px rgba(0, 205, 96, 0.30),
+          0 0 7px 2px rgba(0, 205, 96, 0.40);
+        animation: m3-splash 1.8s ease-in-out infinite;
+      }
+      .m5__progress {
+        margin-top: 5px;
+        font-size: 11.5px; font-weight: 700; color: var(--gray500);
+        letter-spacing: -0.01em;
+      }
+
+      /* 섹션 하단 자세히보기 버튼 */
+      .detail-btn {
+        display: flex; align-items: center; justify-content: center;
+        width: 100%;
+        margin-top: 14px;
+        padding: 15px 16px;
+        background: var(--green50);
+        border-radius: var(--r-md);
+        font-size: 14px; font-weight: 700; color: var(--green500);
+        letter-spacing: -0.3px;
+        text-decoration: none;
+        transition:
+          background 200ms var(--ease-out-quart),
+          transform 200ms var(--ease-out-quart);
+      }
+      .detail-btn:active { background: var(--green100); transform: scale(0.99); }
+      @media (hover: hover) { .detail-btn:hover { background: var(--green100); } }
+
+    </style>
+  </head>
+  <body>
+    <main class="frame">
+      <div class="app">
+        <!-- ========================================
+             VIEW: 스코어 생성된
+             ======================================== -->
+        <section
+          id="view-result"
+          class="view is-active"
+          data-view="result"
+          aria-label="네이버페이 스코어 생성 완료"
+        >
+          <header class="gnb">
+            <button class="gnb__back" aria-label="뒤로">
+              <svg viewBox="0 0 9 16" fill="none" aria-hidden="true">
+                <path
+                  d="M8 1 1 8l7 7"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <div class="gnb__tabs">
+              <span class="gnb__tab">금융 홈</span>
+              <span class="gnb__tab is-active">신용점수</span>
+              <span class="gnb__tab">대출비교</span>
+            </div>
+          </header>
+
+          <div class="scroll">
+            <!-- 듀얼 아크: NPay 스코어 + 신용성장계좌 -->
+            <div style="width:100%;display:flex;justify-content:center;margin-top:24px;margin-bottom:16px;">
+              <div class="v1-wrap">
+                <!-- NPay -->
+                <div class="arc">
+                  <svg viewBox="0 0 132 80">
+                    <path d="M10,70 A56,56 0 0,1 122,70" fill="none" stroke="#e8e8eb" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M10,70 A56,56 0 0,1 122,70" fill="none" stroke="#00CD60" stroke-width="6" stroke-linecap="round" stroke-dasharray="176" stroke-dashoffset="35"/>
+                  </svg>
+                  <div class="arc__inner">
+                    <span class="arc__lbl">Npay 스코어</span>
+                    <span class="arc__val tnum">720<small>점</small></span>
+                  </div>
+                </div>
+                <!-- 신용성장계좌 -->
+                <div class="arc">
+                  <svg viewBox="0 0 132 80">
+                    <path d="M10,70 A56,56 0 0,1 122,70" fill="none" stroke="#e8e8eb" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M10,70 A56,56 0 0,1 122,70" fill="none" stroke="#00897B" stroke-width="6" stroke-linecap="round" stroke-dasharray="176" stroke-dashoffset="22"/>
+                  </svg>
+                  <div class="arc__inner">
+                    <span class="arc__lbl">신용성장계좌</span>
+                    <span class="arc__val tnum">847<small>점</small></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 섹션 ① 혜택받기 -->
+            <article class="section stagger">
+              <span class="section__badge">혜택받기</span>
+              <h2 class="section__title">
+                네이버페이 스코어로<br />다양한 금융 혜택 받아 보세요
+              </h2>
+              <p class="section__body">
+                대출을 시작으로 앞으로 네이버페이 스코어를 활용한 다양한
+                금융 혜택을 제공할 예정이에요.
+              </p>
+              <div class="cards">
+                <a
+                  class="card"
+                  href="https://loan.pay.naver.com/n/credit"
+                  target="_blank"
+                  rel="noopener"
+                  style="text-decoration:none;color:inherit;"
+                >
+                  <div
+                    class="card__icon"
+                    style="background:#fff8e1;color:#f59e0b"
+                  >
+                    💰
+                  </div>
+                  <div class="card__body">
+                    <div class="card__title">1금융권 대출 조건 우대</div>
+                    <div class="card__amount">신용성장계좌 점수 연동</div>
+                  </div>
+                  <svg
+                    class="card__arrow"
+                    width="6"
+                    height="10"
+                    viewBox="0 0 6 10"
+                    fill="none"
+                  >
+                    <path
+                      d="m1 1 4 4-4 4"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+                <a
+                  class="card"
+                  href="https://loan.pay.naver.com/n/credit"
+                  target="_blank"
+                  rel="noopener"
+                  style="text-decoration:none;color:inherit;"
+                >
+                  <div
+                    class="card__icon"
+                    style="background:#eaf2ff;color:#2563eb"
+                  >
+                    🛡️
+                  </div>
+                  <div class="card__body">
+                    <div class="card__title">SBI저축은행 외 17개</div>
+                    <div class="card__amount">최대 -2.0% · 최대 +1천만원</div>
+                  </div>
+                  <svg
+                    class="card__arrow"
+                    width="6"
+                    height="10"
+                    viewBox="0 0 6 10"
+                    fill="none"
+                  >
+                    <path
+                      d="m1 1 4 4-4 4"
+                      stroke="currentColor"
+                      stroke-width="1.4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </article>
+
+            <!-- 섹션 ② Npay 스코어 올리기 -->
+            <article class="section stagger">
+              <span class="section__badge">Npay 스코어 올리기</span>
+              <h2 class="section__title">
+                미션 완료하고<br />스코어 올려 보세요
+              </h2>
+              <p class="section__body">
+                단계별로 진행하며 점수를 누적할 수 있어요.
+              </p>
+              <div class="m3">
+                <div class="m3__card">
+                  <div
+                    class="m3__icon"
+                    style="background:#fff8e1;color:#f59e0b"
+                  >
+                    💰
+                  </div>
+                  <div class="m3__body">
+                    <div class="m3__title">네이버페이 포인트로 결제하기</div>
+                    <div class="m3__bar">
+                      <div class="m3__bar-fill" style="width:45%"></div>
+                    </div>
+                    <div class="m3__progress tnum">4,500원 / 10,000원</div>
+                  </div>
+                </div>
+                <div class="m3__card">
+                  <div
+                    class="m3__icon"
+                    style="background:#e6f7ee;color:#00b754"
+                  >
+                    🏦
+                  </div>
+                  <div class="m3__body">
+                    <div class="m3__title">네이버페이 머니통장 저축하기</div>
+                    <div class="m3__bar">
+                      <div class="m3__bar-fill" style="width:16.67%"></div>
+                    </div>
+                    <div class="m3__progress tnum">50,000원 / 300,000원</div>
+                  </div>
+                </div>
+                <div class="m3__card">
+                  <div
+                    class="m3__icon"
+                    style="background:#eaf2ff;color:#2563eb"
+                  >
+                    💳
+                  </div>
+                  <div class="m3__body">
+                    <div class="m3__title">네이버페이 머니카드 결제하기</div>
+                    <div class="m3__bar">
+                      <div class="m3__bar-fill" style="width:44.5%"></div>
+                    </div>
+                    <div class="m3__progress tnum">133,500원 / 300,000원</div>
+                  </div>
+                </div>
+              </div>
+              <a href="#" class="detail-btn">Npay 스코어 자세히보기</a>
+            </article>
+
+            <!-- 섹션 ③ 신용성장계좌 성장하기 -->
+            <article class="section stagger">
+              <span class="section__badge">신용성장계좌 성장하기</span>
+              <h2 class="section__title">
+                네이버페이 많이쓰면<br />신용성장계좌도 성장해요
+              </h2>
+              <p class="section__body">
+                어떤 데이터들로 성장하고 있는지 살펴보세요.
+              </p>
+              <div class="m5">
+                <div class="m5__card">
+                  <div
+                    class="m5__icon"
+                    style="background:#e6f7ee;color:#00b754"
+                  >
+                    💳
+                  </div>
+                  <div class="m5__body">
+                    <div class="m5__head">
+                      <span class="m5__title">Npay 소비<small>(월 평균)</small></span>
+                      <span class="m5__pts">+5점<em>예상</em></span>
+                    </div>
+                    <div class="m5__bar">
+                      <div class="m5__bar-fill" style="width:75%"></div>
+                    </div>
+                    <div class="m5__progress tnum">150만원 / 200만원</div>
+                  </div>
+                </div>
+                <div class="m5__card">
+                  <div
+                    class="m5__icon"
+                    style="background:#eaf2ff;color:#2563eb"
+                  >
+                    📱
+                  </div>
+                  <div class="m5__body">
+                    <div class="m5__head">
+                      <span class="m5__title">통신비 성실 납부<small>(연속 개월)</small></span>
+                      <span class="m5__pts">+3점<em>예상</em></span>
+                    </div>
+                    <div class="m5__bar">
+                      <div class="m5__bar-fill" style="width:66.67%"></div>
+                    </div>
+                    <div class="m5__progress tnum">24개월 / 36개월</div>
+                  </div>
+                </div>
+                <div class="m5__card">
+                  <div
+                    class="m5__icon"
+                    style="background:#f3edff;color:#7c3aed"
+                  >
+                    📚
+                  </div>
+                  <div class="m5__body">
+                    <div class="m5__head">
+                      <span class="m5__title">문화 활동</span>
+                      <span class="m5__pts">+1점<em>예상</em></span>
+                    </div>
+                    <div class="m5__bar">
+                      <div class="m5__bar-fill" style="width:33.33%"></div>
+                    </div>
+                    <div class="m5__progress tnum">월 1권 / 월 3권</div>
+                  </div>
+                </div>
+                <div class="m5__card">
+                  <div
+                    class="m5__icon"
+                    style="background:#fff4e0;color:#f59e0b"
+                  >
+                    🐷
+                  </div>
+                  <div class="m5__body">
+                    <div class="m5__head">
+                      <span class="m5__title">건전 소비<small>(포인트 소액 저축)</small></span>
+                      <span class="m5__pts">+2점<em>예상</em></span>
+                    </div>
+                    <div class="m5__bar">
+                      <div class="m5__bar-fill" style="width:33.33%"></div>
+                    </div>
+                    <div class="m5__progress tnum">1만원 / 3만원</div>
+                  </div>
+                </div>
+              </div>
+              <a href="#" class="detail-btn">신용성장계좌 자세히보기</a>
+            </article>
+
+            <p class="footnote">
+              * 네이버페이 스코어는 매월 1일 갱신됩니다.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      /* 버튼 ripple */
+      document.addEventListener("pointerdown", (e) => {
+        const btn = e.target.closest(".btn");
+        if (!btn) return;
+        const rect = btn.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const ripple = document.createElement("span");
+        ripple.className = "ripple";
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+        ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+        btn.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+      });
+    </script>
+  </body>
+</html>
