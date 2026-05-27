@@ -28,9 +28,18 @@
         padding-top: 36px;
       }
       .arc__lbl {
-        font-size: 12px; font-weight: 700; color: #8a8a8a;
-        letter-spacing: 0.02em;
-        margin-bottom: 4px;
+        display: inline-flex; align-items: center;
+        padding: 4px 10px;
+        background: #e6faf0;
+        border-radius: 999px;
+        font-size: 11px; font-weight: 700;
+        color: #00b754;
+        letter-spacing: -0.01em;
+        margin-bottom: 6px;
+      }
+      .arc__lbl--teal {
+        background: #d6f1e3;
+        color: #00897B;
       }
       .arc__val {
         font-size: 30px; font-weight: 800; color: #1a1a1a;
@@ -253,7 +262,7 @@
                     <path d="M10,70 A56,56 0 0,1 122,70" fill="none" stroke="#00897B" stroke-width="6" stroke-linecap="round" stroke-dasharray="176" stroke-dashoffset="22"/>
                   </svg>
                   <div class="arc__inner">
-                    <span class="arc__lbl">신용성장계좌</span>
+                    <span class="arc__lbl arc__lbl--teal">신용성장계좌</span>
                     <span class="arc__val tnum">847<small>점</small></span>
                   </div>
                 </div>
