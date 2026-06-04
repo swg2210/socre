@@ -207,6 +207,84 @@
       .detail-btn:active { background: var(--green100); transform: scale(0.99); }
       @media (hover: hover) { .detail-btn:hover { background: var(--green100); } }
 
+      /* 신용성장계좌 A안: 자물쇠 카드형 */
+      .a-card {
+        background: var(--gray100); border-radius: var(--r-lg);
+        padding: 13px 14px; display: flex; align-items: center; gap: 14px;
+        margin-bottom: 8px;
+      }
+      .a-icon {
+        width: 40px; height: 40px; border-radius: var(--r-md);
+        background: var(--white); display: grid; place-items: center;
+        font-size: 19px; flex-shrink: 0;
+      }
+      .a-body { flex: 1; min-width: 0; }
+      .a-title {
+        font-size: 14px; font-weight: 700; color: var(--gray900);
+        letter-spacing: -0.25px; margin-bottom: 8px;
+      }
+      .a-bar {
+        height: 6px; background: var(--gray200); border-radius: 999px;
+        position: relative; overflow: hidden;
+      }
+      .a-bar-shine {
+        position: absolute; inset: 0;
+        background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.75) 50%, transparent 100%);
+        background-size: 200% 100%;
+        animation: a-shimmer 1.6s ease-in-out infinite;
+      }
+      @keyframes a-shimmer {
+        0%   { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+      .a-lock {
+        display: inline-flex; align-items: center; gap: 4px;
+        margin-top: 5px;
+        font-size: 11px; font-weight: 700; color: var(--gray400);
+      }
+      .a-lock svg { width: 10px; height: 10px; }
+      .a-hint {
+        margin-top: 12px; padding: 12px 14px;
+        background: var(--green50); border-radius: var(--r-md);
+        font-size: 12.5px; font-weight: 600; color: var(--green500);
+        letter-spacing: -0.2px; line-height: 1.5; text-align: center;
+      }
+
+      /* 신용성장계좌 신청 버튼 (Primary) */
+      .apply-btn {
+        display: flex; align-items: center; justify-content: center;
+        width: 100%;
+        margin-top: 14px;
+        padding: 16px;
+        background: var(--green400);
+        color: #fff;
+        border: none;
+        border-radius: var(--r-md);
+        font-size: 15px; font-weight: 700;
+        letter-spacing: -0.3px;
+        text-decoration: none;
+        cursor: pointer;
+        transition:
+          background 200ms var(--ease-out-quart),
+          transform 200ms var(--ease-out-quart);
+      }
+      .apply-btn:active { background: var(--green500); transform: scale(0.99); }
+      @media (hover: hover) { .apply-btn:hover { background: var(--green500); } }
+
+      /* 아크 안 생성하기 버튼 */
+      .arc__make-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        padding: 5px 14px;
+        background: #00897B;
+        color: #fff;
+        border-radius: 999px;
+        font-size: 12px; font-weight: 700;
+        letter-spacing: -0.2px;
+        text-decoration: none;
+        margin-top: 4px;
+        transition: background 150ms, transform 150ms;
+      }
+      .arc__make-btn:active { background: #00695C; transform: scale(0.96); }
     </style>
   </head>
   <body>
@@ -263,7 +341,8 @@
                   </svg>
                   <div class="arc__inner">
                     <span class="arc__lbl arc__lbl--teal">신용성장계좌</span>
-                    <span class="arc__val tnum">847<small>점</small></span>
+                    <a href="index_loading.html" class="arc__make-btn" id="cs-make-btn">생성하기</a>
+                    <span class="arc__val tnum" id="cs-score" style="display:none">847<small>점</small></span>
                   </div>
                 </div>
               </div>
@@ -315,7 +394,7 @@
                 </a>
                 <a
                   class="card"
-                  href="https://loan.pay.naver.com/n/credit"
+                  href="https://loan.pay.naver.com/n/credit/benefits?from=banner"
                   target="_blank"
                   rel="noopener"
                   style="text-decoration:none;color:inherit;"
@@ -409,95 +488,113 @@
             </article>
 
             <!-- 섹션 ③ 신용성장계좌 성장하기 -->
-            <article class="section stagger">
+            <article class="section stagger" id="cs-section">
               <span class="section__badge">신용성장계좌 성장하기</span>
-              <h2 class="section__title">
-                네이버페이 많이쓰면<br />신용성장계좌도 성장해요
+              <h2 class="section__title" id="cs-title">
+                어떤 데이터로<br />점수가 쌓이고 있을까요?
               </h2>
-              <p class="section__body">
-                어떤 데이터들로 성장하고 있는지 살펴보세요.
+              <p class="section__body" id="cs-body">
+                신용성장계좌를 생성하면<br />내 활동 데이터를 바로 확인할 수 있어요.
               </p>
-              <div class="m5">
-                <div class="m5__card">
-                  <div
-                    class="m5__icon"
-                    style="background:#e6f7ee;color:#00b754"
-                  >
-                    💳
-                  </div>
-                  <div class="m5__body">
-                    <div class="m5__head">
-                      <span class="m5__title">Npay 소비<small>(월 평균)</small></span>
-                      <span class="m5__pts">+5점<em>예상</em></span>
-                    </div>
-                    <div class="m5__bar">
-                      <div class="m5__bar-fill" style="width:75%"></div>
-                    </div>
-                    <div class="m5__progress tnum">150만원 / 200만원</div>
+
+              <!-- 미생성 상태: 자물쇠 카드형 (A안) -->
+              <div id="cs-locked">
+                <div class="a-card">
+                  <div class="a-icon" style="background:#e6f7ee;color:#00b754">💳</div>
+                  <div class="a-body">
+                    <div class="a-title">Npay 소비</div>
+                    <div class="a-bar"><div class="a-bar-shine"></div></div>
+                    <span class="a-lock">
+                      <svg viewBox="0 0 12 14" fill="none"><rect x="2" y="6" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4 6V4a2 2 0 0 1 4 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                      생성 후 확인
+                    </span>
                   </div>
                 </div>
-                <div class="m5__card">
-                  <div
-                    class="m5__icon"
-                    style="background:#eaf2ff;color:#2563eb"
-                  >
-                    📱
-                  </div>
-                  <div class="m5__body">
-                    <div class="m5__head">
-                      <span class="m5__title">통신비 성실 납부<small>(연속 개월)</small></span>
-                      <span class="m5__pts">+3점<em>예상</em></span>
-                    </div>
-                    <div class="m5__bar">
-                      <div class="m5__bar-fill" style="width:66.67%"></div>
-                    </div>
-                    <div class="m5__progress tnum">24개월 / 36개월</div>
+                <div class="a-card">
+                  <div class="a-icon" style="background:#eaf2ff;color:#2563eb">📱</div>
+                  <div class="a-body">
+                    <div class="a-title">통신비 성실 납부</div>
+                    <div class="a-bar"><div class="a-bar-shine"></div></div>
+                    <span class="a-lock">
+                      <svg viewBox="0 0 12 14" fill="none"><rect x="2" y="6" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4 6V4a2 2 0 0 1 4 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                      생성 후 확인
+                    </span>
                   </div>
                 </div>
-                <div class="m5__card">
-                  <div
-                    class="m5__icon"
-                    style="background:#f3edff;color:#7c3aed"
-                  >
-                    📚
-                  </div>
-                  <div class="m5__body">
-                    <div class="m5__head">
-                      <span class="m5__title">문화 활동</span>
-                      <span class="m5__pts">+1점<em>예상</em></span>
-                    </div>
-                    <div class="m5__bar">
-                      <div class="m5__bar-fill" style="width:33.33%"></div>
-                    </div>
-                    <div class="m5__progress tnum">월 1권 / 월 3권</div>
+                <div class="a-card">
+                  <div class="a-icon" style="background:#f3edff;color:#7c3aed">📚</div>
+                  <div class="a-body">
+                    <div class="a-title">문화 활동 · 건전 소비 외</div>
+                    <div class="a-bar"><div class="a-bar-shine"></div></div>
+                    <span class="a-lock">
+                      <svg viewBox="0 0 12 14" fill="none"><rect x="2" y="6" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4 6V4a2 2 0 0 1 4 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                      생성 후 확인
+                    </span>
                   </div>
                 </div>
-                <div class="m5__card">
-                  <div
-                    class="m5__icon"
-                    style="background:#fff4e0;color:#f59e0b"
-                  >
-                    🐷
+                <div class="a-hint">내 데이터로 생성된 점수 바로 확인해보세요 🔓</div>
+              </div>
+
+              <!-- 생성 후 상태: 실제 데이터 (hidden by default) -->
+              <div id="cs-revealed" style="display:none">
+                <div class="m5">
+                  <div class="m5__card">
+                    <div class="m5__icon" style="background:#e6f7ee;color:#00b754">💳</div>
+                    <div class="m5__body">
+                      <div class="m5__head"><span class="m5__title">Npay 소비<small>(월 평균)</small></span><span class="m5__pts">+5점<em>예상</em></span></div>
+                      <div class="m5__bar"><div class="m5__bar-fill" style="width:75%"></div></div>
+                      <div class="m5__progress tnum">150만원 / 200만원</div>
+                    </div>
                   </div>
-                  <div class="m5__body">
-                    <div class="m5__head">
-                      <span class="m5__title">건전 소비<small>(포인트 소액 저축)</small></span>
-                      <span class="m5__pts">+2점<em>예상</em></span>
+                  <div class="m5__card">
+                    <div class="m5__icon" style="background:#eaf2ff;color:#2563eb">📱</div>
+                    <div class="m5__body">
+                      <div class="m5__head"><span class="m5__title">통신비 성실 납부<small>(연속 개월)</small></span><span class="m5__pts">+3점<em>예상</em></span></div>
+                      <div class="m5__bar"><div class="m5__bar-fill" style="width:66.67%"></div></div>
+                      <div class="m5__progress tnum">24개월 / 36개월</div>
                     </div>
-                    <div class="m5__bar">
-                      <div class="m5__bar-fill" style="width:33.33%"></div>
+                  </div>
+                  <div class="m5__card">
+                    <div class="m5__icon" style="background:#f3edff;color:#7c3aed">📚</div>
+                    <div class="m5__body">
+                      <div class="m5__head"><span class="m5__title">문화 활동</span><span class="m5__pts">+1점<em>예상</em></span></div>
+                      <div class="m5__bar"><div class="m5__bar-fill" style="width:33.33%"></div></div>
+                      <div class="m5__progress tnum">월 1권 / 월 3권</div>
                     </div>
-                    <div class="m5__progress tnum">1만원 / 3만원</div>
+                  </div>
+                  <div class="m5__card">
+                    <div class="m5__icon" style="background:#fff4e0;color:#f59e0b">🐷</div>
+                    <div class="m5__body">
+                      <div class="m5__head"><span class="m5__title">건전 소비<small>(포인트 소액 저축)</small></span><span class="m5__pts">+2점<em>예상</em></span></div>
+                      <div class="m5__bar"><div class="m5__bar-fill" style="width:33.33%"></div></div>
+                      <div class="m5__progress tnum">1만원 / 3만원</div>
+                    </div>
                   </div>
                 </div>
               </div>
-              <a href="#" class="detail-btn">신용성장계좌 자세히보기</a>
+
+              <a href="index_loading.html" class="apply-btn" id="cs-apply-btn">신용성장계좌 신청하기</a>
             </article>
 
           </div>
         </section>
       </div>
     </main>
+
+
+
+    <script>
+      /* ?revealed=1 이면 신용성장계좌 전환: 생성하기→점수, 잠김카드→실데이터 */
+      if (new URLSearchParams(location.search).get("revealed") === "1") {
+        document.getElementById("cs-make-btn").style.display = "none";
+        document.getElementById("cs-score").style.display = "";
+        document.getElementById("cs-locked").style.display = "none";
+        document.getElementById("cs-revealed").style.display = "";
+        document.getElementById("cs-apply-btn").style.display = "none";
+        document.getElementById("cs-title").innerHTML = "네이버페이 많이쓰면<br />신용성장계좌도 성장해요";
+        document.getElementById("cs-body").textContent = "어떤 데이터들로 성장하고 있는지 살펴보세요.";
+      }
+    </script>
 
     <script>
       /* 버튼 ripple */

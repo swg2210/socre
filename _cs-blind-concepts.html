@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>신용성장계좌 블라인드 섹션 시안 · 3종</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css" />
+<style>
+  :root {
+    --green:      #00CD60;
+    --green-deep: #00b754;
+    --green-soft: #E6FAF0;
+    --teal:       #00897B;
+    --teal-soft:  #E0F2F1;
+    --ink:        #1e1e23;
+    --gray900:    #1e1e23;
+    --gray700:    #767678;
+    --gray500:    #9aa0a8;
+    --gray400:    #c4c8cf;
+    --gray300:    #d4d4d4;
+    --gray200:    #ebeef2;
+    --gray100:    #f6f8fa;
+    --bg:         #f2f3f5;
+    --white:      #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 32px 16px 80px;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.3px;
+  }
+  .page-title {
+    max-width: 1100px; margin: 0 auto 32px;
+    font-size: 22px; font-weight: 700;
+  }
+  .page-title small {
+    display: block; margin-top: 6px;
+    font-size: 13px; font-weight: 500; color: var(--gray500);
+  }
+  .grid {
+    display: grid; gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    max-width: 1100px; margin: 0 auto;
+  }
+  .frame {
+    background: var(--white); border-radius: 20px; padding: 20px 16px 24px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .frame__label {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .frame__num  { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--gray500); }
+  .frame__name { font-size: 15px; font-weight: 700; color: var(--ink); }
+  .frame__desc { font-size: 12px; color: var(--gray500); font-weight: 500; margin-bottom: 18px; line-height: 1.5; }
+  .stage {
+    background: var(--bg); border-radius: 16px; padding: 24px 20px;
+    min-height: 280px;
+  }
+
+  /* ── 공통: 섹션 배지 ── */
+  .badge {
+    display: inline-flex; align-items: center;
+    padding: 5px 10px 6px;
+    background: var(--teal-soft); color: var(--teal);
+    border-radius: 999px;
+    font-size: 11px; font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .sec-title {
+    font-size: 18px; font-weight: 700; line-height: 1.4;
+    color: var(--gray900); letter-spacing: -0.4px;
+    margin-bottom: 6px;
+  }
+  .sec-body {
+    font-size: 13px; line-height: 1.55; color: var(--gray700);
+    letter-spacing: -0.2px; margin-bottom: 18px;
+  }
+
+  /* ── 공통: 하단 버튼 ── */
+  .apply-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; margin-top: 16px; padding: 15px;
+    background: var(--teal); color: #fff;
+    border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
+    text-decoration: none; cursor: pointer;
+    transition: background 150ms, transform 150ms;
+  }
+  .apply-btn:active { background: #00695C; transform: scale(0.99); }
+
+
+  /* ════════════════════════════════════════
+     시안 A: 자물쇠 카드형
+     ════════════════════════════════════════ */
+  .a-card {
+    background: var(--white); border-radius: 12px;
+    padding: 13px 14px; display: flex; align-items: center; gap: 14px;
+    margin-bottom: 8px;
+  }
+  .a-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--gray100); display: grid; place-items: center;
+    font-size: 19px; flex-shrink: 0;
+  }
+  .a-body { flex: 1; min-width: 0; }
+  .a-title {
+    font-size: 14px; font-weight: 700; color: var(--gray900);
+    letter-spacing: -0.25px; margin-bottom: 8px;
+  }
+  .a-bar {
+    height: 6px; background: var(--gray200); border-radius: 999px;
+    position: relative; overflow: hidden;
+  }
+  .a-bar-shine {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg,
+      transparent 0%, rgba(255,255,255,0.7) 40%, transparent 80%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .a-lock {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 5px;
+    font-size: 11px; font-weight: 700; color: var(--gray400);
+    letter-spacing: -0.1px;
+  }
+  .a-lock svg { width: 10px; height: 10px; }
+
+  .a-hint {
+    margin-top: 12px; padding: 12px 14px;
+    background: var(--teal-soft); border-radius: 10px;
+    font-size: 12.5px; font-weight: 600; color: var(--teal);
+    letter-spacing: -0.2px; line-height: 1.5;
+    text-align: center;
+  }
+
+
+  /* ════════════════════════════════════════
+     시안 B: 데이터 소스 티저형
+     ════════════════════════════════════════ */
+  .b-chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 20px;
+  }
+  .b-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 12px;
+    background: var(--white); border-radius: 999px;
+    font-size: 13px; font-weight: 600; color: var(--gray700);
+    letter-spacing: -0.2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .b-chip__icon { font-size: 16px; }
+  .b-chip.is-highlight {
+    background: var(--teal-soft); color: var(--teal);
+  }
+
+  .b-potential {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--white); border-radius: 12px;
+    margin-bottom: 0;
+  }
+  .b-potential__label {
+    font-size: 13px; font-weight: 700; color: var(--gray700);
+    letter-spacing: -0.2px;
+  }
+  .b-potential__label small {
+    display: block; margin-top: 2px;
+    font-size: 11.5px; font-weight: 500; color: var(--gray400);
+  }
+  .b-potential__score {
+    font-size: 28px; font-weight: 800; color: var(--teal);
+    letter-spacing: -0.04em;
+  }
+  .b-potential__score small {
+    font-size: 14px; font-weight: 700; margin-left: 1px;
+  }
+  .b-divider {
+    height: 1px; background: var(--gray200); margin: 14px 0;
+  }
+  .b-footnote {
+    text-align: center; font-size: 11.5px; font-weight: 600;
+    color: var(--gray400); letter-spacing: -0.1px; margin-bottom: 4px;
+  }
+
+
+  /* ════════════════════════════════════════
+     시안 C: 성장 잠재력 형 (궁금증 유발)
+     ════════════════════════════════════════ */
+  .c-potential-box {
+    background: linear-gradient(135deg, #00897B 0%, #00b09b 100%);
+    border-radius: 14px; padding: 20px;
+    color: #fff; text-align: center;
+    margin-bottom: 16px;
+    position: relative; overflow: hidden;
+  }
+  .c-potential-box::before {
+    content: "";
+    position: absolute; top: -30px; right: -20px;
+    width: 100px; height: 100px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .c-potential-box::after {
+    content: "";
+    position: absolute; bottom: -20px; left: 10px;
+    width: 70px; height: 70px; border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .c-potential-box__kicker {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    opacity: 0.8; margin-bottom: 8px;
+  }
+  .c-potential-box__score {
+    font-size: 52px; font-weight: 800; letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .c-potential-box__score span {
+    font-size: 22px; font-weight: 700; opacity: 0.8; margin-left: 2px;
+  }
+  .c-potential-box__sub {
+    margin-top: 8px; font-size: 12px; font-weight: 600;
+    opacity: 0.75; letter-spacing: -0.2px;
+  }
+
+  .c-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+  .c-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 14px;
+    background: var(--white); border-radius: 10px;
+  }
+  .c-row__left {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .c-row__icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--gray100); display: grid; place-items: center;
+    font-size: 16px;
+  }
+  .c-row__label {
+    font-size: 13.5px; font-weight: 600; color: var(--gray900);
+    letter-spacing: -0.25px;
+  }
+  .c-row__pts {
+    font-size: 14px; font-weight: 800; color: var(--teal);
+    letter-spacing: -0.02em;
+    background: var(--teal-soft);
+    padding: 3px 9px; border-radius: 999px;
+    filter: blur(5px);
+    user-select: none;
+  }
+
+</style>
+</head>
+<body>
+
+<h1 class="page-title">
+  신용성장계좌 블라인드 섹션 시안
+  <small>신용성장계좌 미생성 상태 · 3가지 UX 컨셉 비교</small>
+</h1>
+
+<div class="grid">
+
+  <!-- ════ 시안 A ════ -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">A</span>
+      <span class="frame__name">자물쇠 카드형</span>
+    </header>
+    <p class="frame__desc">기존 카드 구조 유지 · 수치는 잠김 처리<br/>진행 바 shimmer 애니메이션으로 "채워질 여지" 암시</p>
+    <div class="stage">
+      <span class="badge">신용성장계좌 성장하기</span>
+      <h2 class="sec-title">어떤 데이터로<br />점수가 쌓이고 있을까요?</h2>
+      <p class="sec-body">신용성장계좌를 생성하면<br/>내 활동 데이터를 바로 확인할 수 있어요.</p>
+
+      <!-- 카드 1 -->
+      <div class="a-card">
+        <div class="a-icon" style="background:#e6f7ee;color:#00b754">💳</div>
+        <div class="a-body">
+          <div class="a-title">Npay 소비</div>
+          <div class="a-bar"><div class="a-bar-shine"></div></div>
+          <span class="a-lock">
+            <svg viewBox="0 0 12 14" fill="none">
+              <rect x="2" y="6" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M4 6V4a2 2 0 0 1 4 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            생성 후 확인
+          </span>
+        </div>
+      </div>
+
+      <!-- 카드 2 -->
+      <div class="a-card">
+        <div class="a-icon" style="background:#eaf2ff;color:#2563eb">📱</div>
+        <div class="a-body">
+          <div class="a-title">통신비 성실 납부</div>
+          <div class="a-bar"><div class="a-bar-shine"></div></div>
+          <span class="a-lock">
+            <svg viewBox="0 0 12 14" fill="none">
+              <rect x="2" y="6" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M4 6V4a2 2 0 0 1 4 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            생성 후 확인
+          </span>
+        </div>
+      </div>
+
+      <!-- 카드 3 -->
+      <div class="a-card">
+        <div class="a-icon" style="background:#f3edff;color:#7c3aed">📚</div>
+        <div class="a-body">
+          <div class="a-title">문화 활동 · 건전 소비 외</div>
+          <div class="a-bar"><div class="a-bar-shine"></div></div>
+          <span class="a-lock">
+            <svg viewBox="0 0 12 14" fill="none">
+              <rect x="2" y="6" width="8" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M4 6V4a2 2 0 0 1 4 0v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            생성 후 확인
+          </span>
+        </div>
+      </div>
+
+      <div class="a-hint">생성하면 내 데이터가 얼마나 채워졌는지 바로 볼 수 있어요 🔓</div>
+      <a href="index_loading.html" class="apply-btn">신용성장계좌 신청하기</a>
+    </div>
+  </article>
+
+  <!-- ════ 시안 B ════ -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">B</span>
+      <span class="frame__name">데이터 소스 티저형</span>
+    </header>
+    <p class="frame__desc">어떤 활동이 반영되는지 chip으로 미리 노출<br/>예상 점수 업사이드 수치로 생성 동기 자극</p>
+    <div class="stage">
+      <span class="badge">신용성장계좌 성장하기</span>
+      <h2 class="sec-title">이런 활동이<br />점수에 반영돼요</h2>
+      <p class="sec-body">네이버페이를 많이 쓸수록 점수가 올라가요.</p>
+
+      <div class="b-chips">
+        <span class="b-chip is-highlight"><span class="b-chip__icon">💳</span>Npay 소비</span>
+        <span class="b-chip is-highlight"><span class="b-chip__icon">📱</span>통신비 납부</span>
+        <span class="b-chip"><span class="b-chip__icon">📚</span>문화 활동</span>
+        <span class="b-chip"><span class="b-chip__icon">🐷</span>건전 소비</span>
+        <span class="b-chip"><span class="b-chip__icon">🏦</span>저축 패턴</span>
+      </div>
+
+      <div class="b-potential">
+        <div class="b-potential__label">
+          내 예상 점수 상승
+          <small>지금 신청하면 받을 수 있는 점수</small>
+        </div>
+        <div class="b-potential__score">+11<small>점</small></div>
+      </div>
+
+      <div class="b-divider"></div>
+      <p class="b-footnote">신청 후 내 실제 데이터 기반으로 계산돼요</p>
+      <a href="index_loading.html" class="apply-btn">신용성장계좌 신청하기</a>
+    </div>
+  </article>
+
+  <!-- ════ 시안 C ════ -->
+  <article class="frame">
+    <header class="frame__label">
+      <span class="frame__num">C</span>
+      <span class="frame__name">성장 잠재력형</span>
+    </header>
+    <p class="frame__desc">최대 점수를 크게 강조 · 항목별 예상 점수는 blur<br/>"얼마나 오를 수 있을까" 궁금증 유발 후 신청 유도</p>
+    <div class="stage">
+      <span class="badge">신용성장계좌 성장하기</span>
+      <h2 class="sec-title">지금 신청하면<br />최대 이만큼 오를 수 있어요</h2>
+
+      <div class="c-potential-box">
+        <div class="c-potential-box__kicker">예상 점수 상승폭</div>
+        <div class="c-potential-box__score">+11<span>점</span></div>
+        <div class="c-potential-box__sub">현재 내 활동 기준 · 신청 후 확인 가능</div>
+      </div>
+
+      <div class="c-rows">
+        <div class="c-row">
+          <div class="c-row__left">
+            <div class="c-row__icon" style="background:#e6f7ee;color:#00b754">💳</div>
+            <span class="c-row__label">Npay 소비</span>
+          </div>
+          <span class="c-row__pts">+5점</span>
+        </div>
+        <div class="c-row">
+          <div class="c-row__left">
+            <div class="c-row__icon" style="background:#eaf2ff;color:#2563eb">📱</div>
+            <span class="c-row__label">통신비 납부</span>
+          </div>
+          <span class="c-row__pts">+3점</span>
+        </div>
+        <div class="c-row">
+          <div class="c-row__left">
+            <div class="c-row__icon" style="background:#f3edff;color:#7c3aed">📚</div>
+            <span class="c-row__label">문화 활동</span>
+          </div>
+          <span class="c-row__pts">+1점</span>
+        </div>
+        <div class="c-row">
+          <div class="c-row__left">
+            <div class="c-row__icon" style="background:#fff4e0;color:#f59e0b">🐷</div>
+            <span class="c-row__label">건전 소비</span>
+          </div>
+          <span class="c-row__pts">+2점</span>
+        </div>
+      </div>
+
+      <a href="index_loading.html" class="apply-btn" style="margin-top:16px;">신용성장계좌 신청하기</a>
+    </div>
+  </article>
+
+</div>
+</body>
+</html>
