@@ -614,13 +614,15 @@
     </script>
 
   <!-- Demo navigation toggle -->
-  <div id="dt" style="position:fixed;top:16px;right:16px;z-index:9999;background:#fff;border-radius:14px;padding:8px;box-shadow:0 4px 16px rgba(0,0,0,.14);font-family:'Pretendard Variable',sans-serif;">
+  <div id="dt" style="position:fixed;top:16px;right:16px;z-index:9999;background:#fff;border-radius:14px;padding:8px;box-shadow:0 4px 16px rgba(0,0,0,.14);font-family:'Pretendard Variable',sans-serif;min-width:220px;">
     <div style="font-size:10px;font-weight:700;color:#999;letter-spacing:.6px;text-transform:uppercase;padding:0 4px 6px;">케이스 전환</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">
-      <button data-nav="main-pre"   style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">메인(생성전)</button>
-      <button data-nav="main-done"  style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">메인(생성완료)</button>
-      <button data-nav="score-pre"  style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">스코어(생성전)</button>
-      <button data-nav="score-done" style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">스코어(생성완료)</button>
+      <button data-nav="main-pre"    style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">메인(생성전)</button>
+      <button data-nav="main-done"   style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">메인(생성완료)</button>
+      <button data-nav="label-text"  style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">문구형</button>
+      <button data-nav="label-badge" style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">문구형(뱃지)</button>
+      <button data-nav="score-pre"   style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">스코어(생성전)</button>
+      <button data-nav="score-done"  style="padding:7px 14px;border:none;background:transparent;font-size:13px;font-weight:600;color:#555;border-radius:10px;cursor:pointer;white-space:nowrap;letter-spacing:-.3px;font-family:inherit;">스코어(생성완료)</button>
     </div>
   </div>
   <script>
@@ -630,10 +632,12 @@
         if(b.dataset.nav === active){ b.style.background='#1a1a1a'; b.style.color='#fff'; }
         b.addEventListener('click', function(){
           var n = b.dataset.nav;
-          if     (n==='main-pre')   location.href='https://swg2210.github.io/npscore-prototype/?case=pre';
-          else if(n==='main-done')  location.href='https://swg2210.github.io/npscore-prototype/';
-          else if(n==='score-pre')  location.href='https://swg2210.github.io/socre/';
-          else if(n==='score-done') location.href='https://swg2210.github.io/socre/index.html?revealed=1';
+          if     (n==='main-pre')    location.href='https://swg2210.github.io/npscore-prototype/?case=pre';
+          else if(n==='main-done')   location.href='https://swg2210.github.io/npscore-prototype/';
+          else if(n==='label-text')  location.href='https://swg2210.github.io/npscore-prototype/?mode=label-text';
+          else if(n==='label-badge') location.href='https://swg2210.github.io/npscore-prototype/?mode=label-badge';
+          else if(n==='score-pre')   location.href='https://swg2210.github.io/socre/';
+          else if(n==='score-done')  location.href='https://swg2210.github.io/socre/index.html?revealed=1';
         });
       });
     })();
